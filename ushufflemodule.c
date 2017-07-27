@@ -2,31 +2,20 @@
 
 #include "ushuffle.h"
 
-struct module_state {
-    int l_;
-};
-
-#if PY_MAJOR_VERSION >= 3
-#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
-#else
-#define GETSTATE(m) (&_state)
-static struct module_state _state;
-#endif
+static int l_;
 
 static PyObject *ushuffle_shuffle1(PyObject *self, PyObject *args) {
-	const char *s=0;
-	const int l=0;
-	const int k=0;
-
-        struct module_state *st = GETSTATE(self);
+	char *s=0;
+	int l=0;
+	int k=0;
 
 	/* example python call: ushuffle.shuffle1('string', 6, 2) */
 	if (!PyArg_ParseTuple(args, "sii", &s, &l, &k)) {
-		st->l_ = 0;
+		l_ = 0;
 		return NULL;
 	}
 
-	st->l_ = l;
+	l_ = l;
 	shuffle1(s, l, k);
 	Py_INCREF(Py_None);
 	return Py_None;
@@ -36,39 +25,36 @@ static PyObject *ushuffle_shuffle2(PyObject *self, PyObject *args) {
 	char *t;
 	PyObject *T;
 
-        struct module_state *st = GETSTATE(self);
-
-	if (st->l_ <= 0)
+	if (l_ <= 0)
 		return NULL;
 
-	if ((t = malloc((st->l_ + 1) * sizeof(char))) == NULL)
+	if ((t = malloc((l_ + 1) * sizeof(char))) == NULL)
 		return NULL;
 
 	shuffle2(t);
-	t[st->l_] = '\0';
+	t[l_] = '\0';
 	T = Py_BuildValue("s", t);
 	free(t);
 	return T;
 }
 
 static PyObject *ushuffle_shuffle(PyObject *self, PyObject *args) {
-	const char *s=0;
-	const int l=0;
-	const int k=0;
+	char *s=0;
+	int l=0;
+	int k=0;
 	char *t;
 	PyObject *T;
-
-        struct module_state *st = GETSTATE(self);
 
 	/* example python call: ushuffle.shuffle('string', 6, 2) */
 	if (!PyArg_ParseTuple(args, "sii", &s, &l, &k))
 		return NULL;
-	st->l_ = l;
-	if ((t = malloc((st->l_ + 1) * sizeof(char))) == NULL)
+	l_ = l;
+	if ((t = malloc((l_ + 1) * sizeof(char))) == NULL)
 		return NULL;
 
 	shuffle(s, t, l, k);
-	t[st->l_] = '\0';
+	t[l_] = '\0';
+
 	T = Py_BuildValue("s", t);
 	free(t);
 	return T;
@@ -91,8 +77,8 @@ static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
         "ushuffle",
         NULL,
-        sizeof(struct module_state),
-        ushuffleMethods,
+        -1,
+        ushuffleMethods
 };
 
 PyMODINIT_FUNC
