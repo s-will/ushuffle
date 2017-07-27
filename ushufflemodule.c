@@ -14,9 +14,9 @@ static struct module_state _state;
 #endif
 
 static PyObject *ushuffle_shuffle1(PyObject *self, PyObject *args) {
-	const char *s;
-	const int l;
-	const int k;
+	const char *s=0;
+	const int l=0;
+	const int k=0;
 
         struct module_state *st = GETSTATE(self);
 
@@ -52,9 +52,9 @@ static PyObject *ushuffle_shuffle2(PyObject *self, PyObject *args) {
 }
 
 static PyObject *ushuffle_shuffle(PyObject *self, PyObject *args) {
-	const char *s;
-	const int l;
-	const int k;
+	const char *s=0;
+	const int l=0;
+	const int k=0;
 	char *t;
 	PyObject *T;
 
@@ -102,7 +102,6 @@ PyInit_ushuffle(void) {
 }
 #else
 PyMODINIT_FUNC initushuffle(void) {
-    return
-        Py_InitModule("ushuffle", ushuffleMethods);
+    Py_InitModule("ushuffle", ushuffleMethods);
 }
 #endif
