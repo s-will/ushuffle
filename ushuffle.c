@@ -100,7 +100,7 @@ static int hcode(int i_sequence) {
 	}
 	if (f < 0.0)
 		f = -f;
-	return (int) (htablesize * f) % htablesize;
+	return (int) ((long long) (htablesize * f) % htablesize);
 }
 
 static void hinit(int size) {
